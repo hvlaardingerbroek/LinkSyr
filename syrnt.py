@@ -4,13 +4,20 @@
 # now it works in python 2.6 and 3.x!
 from __future__ import unicode_literals, print_function
 
-# TODO move data location to some yaml-ini-file
-
 import os.path
 from constants import SyrNT as c
 
-DATADIR = '/home/gdwarf/projects/vu/LinkSyr/data/'
-FILENAME = 'all-ordered.txt'
+# Read database location from config file
+try: # allow for different module names in python 2 and 3
+    from configparser import ConfigParser
+except ImportError:
+    from ConfigParser import ConfigParser
+
+config = ConfigParser()
+config.read('linksyr.conf')
+datadir = config.get('syrnt','datadir')
+filename = config.get('syrnt','filename')
+dbpath = os.path.join(datadir, filename)
 
 # TODO check discrepancies between SEDRA and Syromorph NT.
 # It seems that
@@ -83,7 +90,7 @@ def get_postag(a):
 
 def get_sentences(tr=towit):
     from io import open # This is for python 2.6 (TODO: why?)
-    with open(os.path.join(DATADIR, FILENAME)) as f:
+    with open(dbpath) as f:
         for line in f:
             yield [wparse(w) for w in line.strip().translate(tr).split()]
 

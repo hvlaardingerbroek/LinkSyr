@@ -1,0 +1,3 @@
+[syrnt]
+datadir: path-to-syromorph-data-directory
+filename: all-ordered.txt
