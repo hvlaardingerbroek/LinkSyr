@@ -337,8 +337,8 @@ def tag_sentences(sentences = None, tag=get_supertag):
 
 def get_verse_labels():
     for book_id, (book_name, chapters) in enumerate(c.NT_BOOKS, 52):
-        for chapter, versecount in enumerate(chapters.split(), 1):
-            for verse in range(1, int(versecount) + 1):
+        for chapter, versecount in enumerate(chapters, 1):
+            for verse in range(1, versecount + 1):
                 yield (book_id, book_name, chapter, verse)
 
 def outputverses(tr=tosyr):
