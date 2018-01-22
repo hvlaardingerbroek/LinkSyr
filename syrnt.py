@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-# now it works in python 2.7 and 3.x!
+# now it works in python 2.6 and 3.x!
 from __future__ import unicode_literals, print_function
 
-# TODO: make it work in 2.6 (remove dict comprehension on line 278)
 # TODO move data location to some yaml-ini-file
 
 import os.path
@@ -42,7 +41,6 @@ def maketrans(s1, s2):
 towit = maketrans('AOKY;CEI/XW','>WXVJK<PYQC')
 tosyr = maketrans('ABGDHOZKY;CLMNSEI/XRWT','ܐܒܓܕܗܘܙܚܛܝܟܠܡܢܣܥܦܨܩܪܫܬ')
 notr = maketrans('','')
-
 
 def get_loc_id(book_id, chapter, verse, word_num):
     '''Combine location elements into fixed-length string'''
@@ -115,12 +113,11 @@ def print_nt():
                 yield ''
                 # nt.append('')   # add newline before chapter label
             yield '{0} chapter {1}'.format(l[1], l[2])
-            # nt.append('{} chapter {}'.format(l[1], l[2])) # add chapter label
+            # nt.append('{0} chapter {1}'.format(l[1], l[2])) # add chapter label
         pl = l
         yield '{0:2} {1}'.format(l[3], v)
-        # nt.append('{:2} {}'.format(l[3], v))
+        # nt.append('{0:2} {1}'.format(l[3], v))
     # return '\n'.join(nt)
-
 
 def main():
     for line in print_nt():
