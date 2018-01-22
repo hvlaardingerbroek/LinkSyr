@@ -36,15 +36,24 @@ NT       = 'nt'
 ATTR = 'attr'
 FEAT = 'feat'
 
-SEDRA_DIR = '../data/sedra'
+# Read database location from config file
+try: # allow for different module names in python 2 and 3
+    from configparser import ConfigParser
+except ImportError:
+    from ConfigParser import ConfigParser
+
+config = ConfigParser()
+config.read('linksyr.conf')
+SEDRA_DIR = config.get('sedra','datadir')
 SEDRA_FILES = {
-    ROOTS:    "ROOTS.TXT",
-    LEXEMES:  "LEXEMES.TXT",
-    WORDS:    "WORDS.TXT",
-    ENGLISH:  "ENGLISH.TXT",
-    ETIMOLGY: "ETIMOLGY.TXT",
-    NT:       "BFBS.TXT"
+    ROOTS:    config.get('sedra','roots'),
+    LEXEMES:  config.get('sedra','lexemes'),
+    WORDS:    config.get('sedra','words'),
+    ENGLISH:  config.get('sedra','english'),
+    ETIMOLGY: config.get('sedra','etimolgy'),
+    NT:       config.get('sedra','nt')
 }
+
 BOOK_NAMES = {
     52 : 'Matt',
     53 : 'Mark',

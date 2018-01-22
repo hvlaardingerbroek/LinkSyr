@@ -1,3 +1,11 @@
 [syrnt]
-datadir: path-to-syromorph-data-directory
+datadir:  path-to-syromorph-data-directory
 filename: all-ordered.txt
+[sedra]
+datadir:  path-to-sedra-data-directory
+roots:    ROOTS.TXT
+lexemes:  LEXEMES.TXT
+words:    WORDS.TXT
+english:  ENGLISH.TXT
+etimolgy: ETIMOLGY.TXT
+nt:       BFBS.TXT
