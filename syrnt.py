@@ -46,7 +46,7 @@ notr = maketrans('','')
 
 def get_loc_id(book_id, chapter, verse, word_num):
     '''Combine location elements into fixed-length string'''
-    return '{:02}{:02}{:03}{:02}'.format(book_id, chapter, verse, word_num)
+    return '{0:02}{1:02}{2:03}{3:02}'.format(book_id, chapter, verse, word_num)
 
 def split_loc_id(loc_id):
     '''Split loc_id into elements: '250100101' -> (25, 1, 1, 1)'''
@@ -114,10 +114,10 @@ def print_nt():
             if pl is not None:  # no newline before first chapter
                 yield ''
                 # nt.append('')   # add newline before chapter label
-            yield '{} chapter {}'.format(l[1], l[2])
+            yield '{0} chapter {1}'.format(l[1], l[2])
             # nt.append('{} chapter {}'.format(l[1], l[2])) # add chapter label
         pl = l
-        yield '{:2} {}'.format(l[3], v)
+        yield '{0:2} {1}'.format(l[3], v)
         # nt.append('{:2} {}'.format(l[3], v))
     # return '\n'.join(nt)
 
