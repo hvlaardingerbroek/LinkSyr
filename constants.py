@@ -188,3 +188,373 @@ class SyrNT:
                                     # 1 has the feminine he dot
         )
     )
+
+
+#====================================================================
+# SEDRA-III constants
+#====================================================================
+class SedraIII:
+    BOOK_NAMES = {
+        52 : 'Matt',
+        53 : 'Mark',
+        54 : 'Luke',
+        55 : 'John',
+        56 : 'Acts',
+        57 : 'Rom',
+        58 : '1Cor',
+        59 : '2Cor',
+        60 : 'Gal',
+        61 : 'Eph',
+        62 : 'Phil',
+        63 : 'Col',
+        64 : '1Thess',
+        65 : '2Thess',
+        66 : '1Tim',
+        67 : '2Tim',
+        68 : 'Titus',
+        69 : 'Phlm',
+        70 : 'Heb',
+        71 : 'James',
+        72 : '1Peter',
+        73 : '2Peter',
+        74 : '1John',
+        75 : '2John',
+        76 : '3John',
+        77 : 'Jude',
+        78 : 'Rev'
+    }
+
+# ROOTS: {                        # ROOTS.TXT
+    ROOTS_ATTR = ((                     # Attributes: 16-bit intiger as follows
+        'SEYAME FLAG', (        # 0  SEYAME FLAG:
+            'NO SEYAME',        #     0 NO SEYAME
+            'SEYAME'            #     1 SEYAME
+        )), (
+        'ROOT TYPE', (          # 1-2 ROOT TYPE:
+            'NORMAL',           #     00 NORMAL
+            'PARETHESIED',      #     01 PARETHESIED
+            'BRACKETED',        #     10 BRACKETED
+            'HIGH FREQUENCY ROOT, e.g. propositons'
+                                #     11 HIGH FREQUENCY ROOT, e.g. propositons
+        )), (
+        '<RESERVED>', None      # 3-15 <RESERVED>
+    ))
+# }
+# LEXEMES: {                      # LEXEMES.TXT
+    LEXEMES_ATTR = ((                    # Attributes: 16-bit intiger as follows
+        'SEYAME FLAG', (        # 0 SEYAME FLAG:
+            'NO SEYAME',        #     0 NO SEYAME
+            'SEYAME'            #     1 SEYAME
+        )), (
+        'WORD TYPE', (          # 1 WORD TYPE:
+            'NORMAL',           #     0 NORMAL
+            'PARENTHESISED'     #     1 PARENTHESISED
+        )), (
+        'GRAMMATICAL CATEGORY', (
+                                # 2-5 GRAMMATICAL CATEGORY:
+            'VERB',             #     0000 VERB
+            'PARTICIPLE ADJECTIVE',
+                                #     0001 PARTICIPLE ADJECTIVE
+            'DENOMINATIVE',     #     0010 DENOMINATIVE
+            'SUBSTANTIVE',      #     0011 SUBSTANTIVE
+            'NOUN',             #     0100 NOUN
+            'PRONOUN',          #     0101 PRONOUN
+            'PROPER_NOUN',      #     0110 PROPER_NOUN
+            'NUMERAL',          #     0111 NUMERAL
+            'ADJECTIVE',        #     1000 ADJECTIVE
+            'PARTICLE',         #     1001 PARTICLE
+            'IDIOM',            #     1010 IDIOM
+            'ADVERB (ending with AiYT)',
+                                #     1011 ADVERB (ending with AiYT)
+            'ADJECTIVE OF PLACE',
+                                #     1100 ADJECTIVE OF PLACE
+            'ADVERB'            #     1101 ADVERB
+        ))
+    )
+    LEXEMES_FEAT = ((                    # Morphological Type: 32-bit intiger as follows
+        'First SUFFIX', (       # 0-3 First SUFFIX:
+            '<NONE>',           #     0000 <NONE>
+            'ToA',              #     0001 ToA
+            'YoA',              #     0010 YoA
+            'NoA',              #     0011 NoA
+            'oNoA',             #     0100 oNoA
+            'iYNoA',            #     0101 iYNoA
+            'uONoA',            #     0110 uONoA
+            'ToNoA',            #     0111 ToNoA
+            'TuONoA',           #     1000 TuONoA
+            'uOSoA',            #     1001 uOSoA
+            'oRoA',             #     1010 oRoA
+            'QoNoA',            #     1011 QoNoA
+            'i;N'               #     1100 i;N
+        )), (
+        'SECOND SUFFIX', (      # 4-5 SECOND SUFFIX:
+            '<NONE>',           #     00 <NONE>
+            'oYoA',             #     01 oYoA
+            'iYToA'             #     10 iYToA
+        )), (
+        'THIRD SUFFIX', (       # 6-7 THIRD SUFFIX:
+            '<NONE>',           #     00 <NONE>
+            'uOToA',            #     01 uOToA
+            'oAiYT'             #     10 oAiYT
+        )), (
+        'PREFIX', (             # 8-9 PREFIX:
+            '<NONE>',           #     00 <NONE>
+            'M',                #     01 M
+            'T',                #     10 T
+            '?????????',         ##              /add -HV
+        )), (
+        'FIRST VOWEL', (        # 10-12 FIRST VOWEL:
+            '<NONE>',           #     000 <NONE>
+            'a',                #     001 a
+            'o',                #     010 o
+            'e',                #     011 e
+            'i',                #     100 i
+            'u'                 #     101 u
+        )), (
+        'SECOND VOWEL', (       # 13-15 SECOND VOWEL: as above
+            '<NONE>',           ##    000 <NONE>
+            'a',                ##    001 a
+            'o',                ##    010 o
+            'e',                ##    011 e
+            'i',                ##    100 i
+            'u'                 ##    101 u
+        )), (
+        'THIRD VOWEL', (        # 16-18 THIRD VOWEL: as above
+            '<NONE>',           ##    000 <NONE>
+            'a',                ##    001 a
+            'o',                ##    010 o
+            'e',                ##    011 e
+            'i',                ##    100 i
+            'u'                 ##    101 u
+        )), (
+        'FOURTH VOWEL', (        # 19-21 FOURTH VOWEL: as above
+            '<NONE>',           ##    000 <NONE>
+            'a',                ##    001 a
+            'o',                ##    010 o
+            'e',                ##    011 e
+            'i',                ##    100 i
+            'u'                 ##    101 u
+        )), (
+        'NUM_VOWELS', None
+        ), (
+                                # 22-24 Total no of vowels in lexeme: 0-7
+        'RADICAL TYPE', (       # 25-27 RADICAL TYPE:
+            '<NONE>',           #     000 <NONE>
+            'BI',               #     001 BI
+            'TRI',              #     010 TRI
+            'FOUR_RADICAL',     #     011 FOUR_RADICAL
+            'FIVE_RADICAL',     #     100 FIVE_RADICAL
+            'SIX_RADICAL',      #     101 SIX_RADICAL
+            'COMPOUND'          #     110 COMPOUND
+        )), (
+        'FORM', (               # 28-31 FORM:
+            '<NONE>',           #     0000 <NONE>
+            'PEAL',             #     0001 PEAL
+            'ETHPEAL',          #     0010 ETHPEAL
+            'PAEL',             #     0011 PAEL
+            'ETHPAEL',          #     0100 ETHPAEL
+            'APHEL',            #     0101 APHEL
+            'ETTAPHAL',         #     0110 ETTAPHAL
+            'SHAPHEL',          #     0111 SHAPHEL
+            'ESHTAPHAL',        #     1000 ESHTAPHAL
+            'SAPHEL',           #     1001 SAPHEL
+            'ESTAPHAL',         #     1010 ESTAPHAL
+            'P',                #     1011 P
+            'ETHP',             #     1100 ETHP
+            'PALPEL',           #     1101 PALPEL
+            'ETHPALPAL'         #     1110 ETHPALPAL
+        ))
+    )
+# }
+# WORDS: {                        # WORDS
+    WORDS_ATTR = ((                     # Attributes: 16-bit intiger as follows
+        'SEYAME FLAG', (        # 0 SEYAME FLAG:
+            'NO SEYAME',        #     0 NO SEYAME
+            'SEYAME'            #     1 SEYAME
+        )), (
+        'ignore', None          # 1-4 ignore
+        ), (
+        'ENCLITIC FLAG', (      # 5 ENCLITIC FLAG:
+            'NOT ENCLITIC',     #     0 NOT ENCLITIC
+            'ENCLITIC'          #     1 ENCLITIC
+        )), (
+        'LEXEME FLAG', (        # 6 LEXEME FLAG:
+            'NO',               #     0 NO
+            'YES, i.e. = word represents lexeme'
+                                #     1 YES, i.e. = word represents lexeme
+        ))
+    )
+    WORDS_FEAT = ((                    # Morphological Features: 32-bit intiger as follows
+        '<RESERVED>', None      # 0-1 <RESERVED>
+        ), (
+        'SUFFIX GENDER', (      # 2-3 SUFFIX GENDER:
+            'COMMON or <NONE>', #     00 COMMON or <NONE>
+            'MASCULINE',        #     01 MASCULINE
+            'SUFFEMININE'       #     10 SUFFEMININE
+        )), (
+        'SUFFIX PERSON', (      # 4-5 SUFFIX PERSON:
+            '<NONE>',           #     00 <NONE>
+            'THIRD',            #     01 THIRD
+            'SECOND',           #     10 SECOND
+            'FIRST'             #     11 FIRST
+        )), (
+        'SUFFIX NUMBER', (      # 6 SUFFIX NUMBER:
+            'SINGULAR or <NONE>',
+                                #     0 SINGULAR or <NONE>
+            'PLURAL'            #     1 PLURAL
+        )), (
+        'SUFFIX/CONTRACTION', ( # 7-8 SUFFIX/CONTRACTION:
+            '<NONE>',           #     00 <NONE>
+            'SUFFIX',           #     01 SUFFIX
+            'CONTRACTION'       #     10 CONTRACTION
+        )), (
+        'PREFIX CODE', None     # 9-14 PREFIX CODE: 0-63
+        ), (
+        'GENDER', (             # 15-16 GENDER:
+            '<NONE>',           #     00 <NONE>
+            'COMMON',           #     01 COMMON
+            'MASCULINE',        #     10 MASCULINE
+            'FEMININE'          #     11 FEMININE
+        )), (
+        'PERSON', (             # 17-18 PERSON:
+            '<NONE>',           #     00 <NONE>
+            'THIRD',            #     01 THIRD
+            'SECOND',           #     10 SECOND
+            'FIRST'             #     11 FIRST
+        )), (
+        'NUMBER', (             # 19-20 NUMBER:
+            '<NONE>',           #     00 <NONE>
+            'SINGULAR',         #     01 SINGULAR
+            'PLURAL'            #     10 PLURAL
+        )), (
+        'STATE', (              # 21-22 STATE:
+            '<NONE>',           #     00 <NONE>
+            'ABSOLUTE',         #     01 ABSOLUTE
+            'CONSTRUCT',        #     10 CONSTRUCT
+            'EMPHATIC'          #     11 EMPHATIC
+        )), (
+        'TENSE', (              # 23-25 TENSE:
+            '<NONE>',           #     000 <NONE>
+            'PERFECT',          #     001 PERFECT
+            'IMPERFECT',        #     010 IMPERFECT
+            'IMPERATIVE',       #     011 IMPERATIVE
+            'INFINITIVE',       #     100 INFINITIVE
+            'ACTIVE_PARTICIPLE',#     101 ACTIVE_PARTICIPLE
+            'PASSIVE_PARTICIPLE',
+                                #     110 PASSIVE_PARTICIPLE
+            'PARTICIPLES'       #     111 PARTICIPLES
+        )), (
+        'FORM', (               # 26-31 FORM:
+            '<NONE>',           #     000000 <NONE>
+            'PEAL',             #     000001 PEAL
+            'ETHPEAL',          #     000010 ETHPEAL
+            'PAEL',             #     000011 PAEL
+            'ETHPAEL',          #     000100 ETHPAEL
+            'APHEL',            #     000101 APHEL
+            'ETTAPHAL',         #     000110 ETTAPHAL
+            'SHAPHEL',          #     000111 SHAPHEL
+            'ESHTAPHAL',        #     001000 ESHTAPHAL
+            'SAPHEL',           #     001001 SAPHEL
+            'ESTAPHAL',         #     001010 ESTAPHAL
+            'PAUEL',            #     001011 PAUEL
+            'ETHPAUAL',         #     001100 ETHPAUAL
+            'PAIEL',            #     001101 PAIEL
+            'ETHPAIAL',         #     001110 ETHPAIAL
+            'PALPAL',           #     001111 PALPAL
+            'ETHPALPAL',        #     010000 ETHPALPAL
+            'PALPEL',           #     010001 PALPEL
+            'ETHPALPAL',        #     010010 ETHPALPAL
+            'PAMEL',            #     010011 PAMEL
+            'ETHPAMAL',         #     010100 ETHPAMAL
+            'PAREL',            #     010101 PAREL
+            'ETHPARAL',         #     010110 ETHPARAL
+            'PALI',             #     010111 PALI
+            'ETHPALI',          #     011000 ETHPALI
+            'PAHLI',            #     011001 PAHLI
+            'ETHPAHLI',         #     011010 ETHPAHLI
+            'TAPHEL',           #     011011 TAPHEL
+            'ETHAPHAL'          #     011100 ETHAPHAL
+        ))
+    )
+# }
+# ENGLISH: {                      # ENGLISH
+    ENGLISH_ATTR = ((                     # Attributes: 15-bit intiger as follows:
+        '<RESERVED>', None      # 0 <RESERVED>
+        ), (
+        'COMMENT POSITION', (   # 1 COMMENT POSITION:
+            'COMMENT BEFORE MEANING',
+                                #     0 COMMENT BEFORE MEANING
+            'COMMENT AFTER MEANING'
+                                #     1 COMMENT AFTER MEANING
+        )), (
+        'COMMENT FONT', (       # 2 COMMENT FONT:
+            'NORMAL',           #     0 NORMAL
+            'ITALIC'            #     1 ITALIC
+        )), (
+        'STRING BEFORE FONT', ( # 3 STRING BEFORE FONT: as above
+            'NORMAL',           ##    0 NORMAL
+            'ITALIC'            ##    1 ITALIC
+        )), (
+        'STRING AFTER FONT', (  # 4 STRING AFTER FONT: as above
+            'NORMAL',           ##    0 NORMAL
+            'ITALIC'            ##    1 ITALIC
+        )), (
+        'VERB TYPE', (          # 5-6 VERB TYPE:
+            '<NONE>',           #     00 <NONE>
+            'TRANSITIVE',       #     01 TRANSITIVE
+            'INTRANSITIVE'      #     10 INTRANSITIVE
+        )), (
+        'NUMBER', (             # 7-8 NUMBER: as above
+            '<NONE>',           ##    00 <NONE>
+            'SINGULAR',         ##    01 SINGULAR
+            'PLURAL'            ##    10 PLURAL
+        )), (
+        'GENDER', (             # 9-10 GENDER: as above
+            '<NONE>',           ##    00 <NONE>
+            'COMMON',           ##    01 COMMON
+            'MASCULINE',        ##    10 MASCULINE
+            'FEMININE'          ##    11 FEMININE
+        )), (
+        'FORM', None               # 11-15 FORM: as above
+            # TODO: what forms are these?
+            # Below the attested values:
+            # (5 bits; the sixth bit is always 0)
+            # 000001 1
+            # 000010 2
+            # 000011 3
+            # 000100 4
+            # 000101 5
+            # 000110 6
+            # 000111 7
+            # 001000 8
+            # 001001 9
+            # 001101 13
+            # 001110 14
+            # 010000 16
+            # 010010 18
+            # 010110 22
+        )
+    )
+# }
+# ETIMOLGY: {                     # ETIMOLGY.TXT
+    ETYMOLOGY_ATTR = ((                     # Attributes: 16-bit intigier as follows:
+        'LANGUAGE', (           # 0-3 LANGUAGE:
+            'SYRIAC',           #     0000  SYRIAC
+            'AKKADIAN',         #     0001  AKKADIAN
+            'ARAMAIC',          #     0010  ARAMAIC
+            'ARABIC',           #     0011  ARABIC
+            'ARMENIAN',         #     0100  ARMENIAN
+            'GREEK',            #     0101  GREEK
+            'HEBREW',           #     0110  HEBREW
+            'LATIN',            #     0111  LATIN
+            'PERSIAN',          #     1000  PERSIAN
+            'SANSKRIT'          #     1001  SANSKRIT
+        )), (
+        'TYPE', (               # 4 TYPE:
+            'NORMAL',           #     0 NORMAL
+            'PARENTHESIED'      #     1 PARENTHESIED
+        )), (
+        'REST', None
+        )
+    )
+# }
