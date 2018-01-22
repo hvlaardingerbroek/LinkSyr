@@ -24,6 +24,7 @@ The BFBS files contain, according to the README file,
 Although the filenames differ, besides other minor inconsistencies,
 the description seems to apply roughly to BFBS.TXT.
 """
+from __future__ import print_function
 import os
 from constants import SedraIII as c
 
