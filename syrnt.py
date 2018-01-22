@@ -305,7 +305,7 @@ def get_supertag(a):
 
 def get_postag(a):
     # Part of Speech, or grammatical category, is annotation field 17
-    return ANNOTATIONS[17][1][a[17]]
+    return c.ANNOTATIONS[17][1][a[17]]
 
 def get_sentences(tr=towit):
     # sentences = []
