@@ -53,7 +53,7 @@ SEDRA_FILES = {
     'lexemes':   config.get('sedra','lexemes'),
     'words':     config.get('sedra','words'),
     'english':   config.get('sedra','english'),
-    'etymology': config.get('sedra','etimolgy'),
+    'etymology': config.get('sedra','etymology'),
     'nt':        config.get('sedra','nt')
 }
 

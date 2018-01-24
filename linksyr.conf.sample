@@ -7,5 +7,5 @@ roots:    ROOTS.TXT
 lexemes:  LEXEMES.TXT
 words:    WORDS.TXT
 english:  ENGLISH.TXT
-etimolgy: ETIMOLGY.TXT
+etymology:ETIMOLGY.TXT
 nt:       BFBS.TXT
