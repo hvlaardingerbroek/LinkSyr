@@ -115,7 +115,7 @@ class Word:
         self.attr = int(line[5])
 
     def __repr__(self):
-        return '<Root id {0}: {1}>'.format(self.id, self.cons_str)
+        return '<Word id {0}: {1}>'.format(self.id, self.cons_str)
 
     def __str__(self):
         return self.cons_str
