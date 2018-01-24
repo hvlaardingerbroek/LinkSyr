@@ -184,7 +184,7 @@ class Etymology:
 class NTWord:
     def __init__(self, line):
         # self._rec_addr = line[0]  # _rec_addr is not unique, so useless
-        self.loc_id = line[1]      # _loc_id
+        self.location = split_loc_id(line[1])      # _loc_id
         # self._word_addr = line[2]
         # word_addr is a crazy encoded decimal value of two combined
         # hexadecimal values, the first of which is always '02'
@@ -192,13 +192,38 @@ class NTWord:
         # the word_id, we must convert word_addr to a hex string
         # of eight positions, and convert the rightmost six back
         # to decimal. The leftmost two will always be '02'.
-        self.word_id = int('{:08x}'.format(int(line[2]))[2:], 16)
+        self.word_id = int('{0:08x}'.format(int(line[2]))[2:], 16)
         self.attr = int(line[3])
 
+    def __repr__(self):
+        return '<NTWord id {0}>'.format(self.loc_str)
+
+    def __str__(self):
+        return self.__repr__()
+
     @property
-    def location(self):
-        groups = ((0,2), (2,4), (4,7), (7,9))
-        return [self.loc_id[start:end] for start, end in groups]
+    def loc_str(self):
+        return '{0:02}{1:02}{2:03}{3:02}'.format(*self.location)
+
+    @property
+    def book(self):
+        return self.location[0]
+
+    @property
+    def book_name(self):
+        return c.BOOK_NAMES[self.location[0]]
+
+    @property
+    def chapter(self):
+        return self.location[1]
+
+    @property
+    def verse(self):
+        return self.location[2]
+
+    @property
+    def word_num(self):
+        return self.location[3]
 
     @property
     def attributes(self):
@@ -207,6 +232,10 @@ class NTWord:
     @property
     def attr_bits(self):
         return '{0:016b}'.format(self.attr)
+
+    @property
+    def word(self):
+        return db[2][self.word_id]
 
 
 def get_address(a):
@@ -222,6 +251,10 @@ def split_bits(n, groups, bits=16):
         result.append(int(b[end:start], 2)) # convert slice back to int
         start = end
     return tuple(result)
+
+def split_loc_id(s):
+    '''Split loc_id s into elements: '250100101' -> (25, 1, 1, 1)'''
+    return tuple(int(e) for e in (s[:2], s[2:4], s[4:7], s[7:]))
 
 def get_values(fields, values):
     """Returns a dict with field names and values
@@ -262,8 +295,24 @@ def read_db_files():
         db.append(d)
     return tuple(db)
 
+# since source file is not in order, need to sort list first
 def read_nt_file():
-    return tuple(NTWord(line) for line in read_db_file(DB_DIR, NT_FILE))
+    nt = []
+    for line in read_db_file(DB_DIR, NT_FILE):
+        nt.append(NTWord(line))
+    return sorted(nt, key=lambda w: w.location)
+
+def nt_verses():
+    prev_verse = 1
+    verse = []
+    for word in nt:
+        if word.verse != prev_verse:
+            yield verse
+            verse = []
+            prev_verse = word.verse
+        verse.append(word)
+    yield verse
+    # return tuple(NTWord(line) for line in read_db_file(DB_DIR, NT_FILE))
 
 db = read_db_files()
 nt = read_nt_file()
