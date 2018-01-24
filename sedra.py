@@ -59,6 +59,12 @@ class Root:
         self.sort_str = line[2]
         self.attr = int(line[3])
 
+    def __repr__(self):
+        return '<Root id {0}: {1}>'.format(self.id, self.rt_str)
+
+    def __str__(self):
+        return self.rt_str
+
     @property
     def attributes(self):
         return split_bits(self.attr, (1, 2, 13), 16)
@@ -75,6 +81,12 @@ class Lexeme:
         self.lex_str = line[2]
         self.feat = int(line[3])
         self.attr = int(line[4])
+
+    def __repr__(self):
+        return '<Lexeme id {0}: {1}>'.format(self.id, self.lex_str)
+
+    def __str__(self):
+        return self.lex_str
 
     @property
     def features(self):
@@ -101,6 +113,12 @@ class Word:
         self.voc_str = line[3]
         self.feat = int(line[4])
         self.attr = int(line[5])
+
+    def __repr__(self):
+        return '<Root id {0}: {1}>'.format(self.id, self.cons_str)
+
+    def __str__(self):
+        return self.cons_str
 
     @property
     def features(self):
@@ -130,6 +148,12 @@ class English:
         self.attr = int(line[6])
         self.ignore = int(line[7])
 
+    def __repr__(self):
+        return '<English id {0}: {1}>'.format(self.id, self.meaning)
+
+    def __str__(self):
+        return self.meaning
+
     @property
     def attributes(self):
         return split_bits(self._attr, (1,1,1,1,1,2,2,2,5), 16)
@@ -142,6 +166,12 @@ class Etymology:
         self.word_origin = line[2]              # Word Origin, e.g. "a\255h\256r"
         self.attr = int(line[3])
 
+    def __repr__(self):
+        return '<Etymology id {0}: {1}>'.format(self.id, self.attr_values['LANGUAGE'])
+
+    def __str__(self):
+        return self.attr_values['LANGUAGE']
+
     @property
     def attributes(self):
         return split_bits(self.attr, (4,1,11), 16)
@@ -151,7 +181,7 @@ class Etymology:
         return get_values(c.ETYMOLOGY_ATTR, self.attributes)
 
 
-class NtWords:
+class NTWord:
     def __init__(self, line):
         # self._rec_addr = line[0]  # _rec_addr is not unique, so useless
         self.loc_id = line[1]      # _loc_id
@@ -233,7 +263,7 @@ def read_db_files():
     return tuple(db)
 
 def read_nt_file():
-    return tuple(NtWords(line) for line in read_db_file(DB_DIR, NT_FILE))
+    return tuple(NTWord(line) for line in read_db_file(DB_DIR, NT_FILE))
 
 db = read_db_files()
 nt = read_nt_file()
