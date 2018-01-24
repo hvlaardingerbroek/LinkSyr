@@ -36,28 +36,28 @@ ENGLISH  = 'english'
 ETIMOLGY = 'etymology'
 NT       = 'nt'
 
-ATTR = 'attr'
-FEAT = 'feat'
+config_filename = 'linksyr.conf'
+config_section = 'sedra'
+config_fields = ('datadir',
+              'roots',
+              'lexemes',
+              'words',
+              'english',
+              'etymology',
+              'nt')
 
 # Read database location from config file
 try: # allow for different module names in python 2 and 3
     from configparser import ConfigParser
 except ImportError:
     from ConfigParser import ConfigParser
-
 config = ConfigParser()
-config.read('linksyr.conf')
-SEDRA_DIR = config.get('sedra','datadir')
-SEDRA_FILES = {
-    'roots':     config.get('sedra','roots'),
-    'lexemes':   config.get('sedra','lexemes'),
-    'words':     config.get('sedra','words'),
-    'english':   config.get('sedra','english'),
-    'etymology': config.get('sedra','etymology'),
-    'nt':        config.get('sedra','nt')
-}
+config.read(config_filename)
+config_items = dict(config.items(config_section))
 
-
+DB_DIR = config_items[config_fields[0]]
+DB_FILES = tuple(config_items[s] for s in config_fields[1:6])
+NT_FILE = config_items[config_fields[6]]
 
 def root_attributes(n):
     # ROOTS.TXT
