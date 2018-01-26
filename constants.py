@@ -1,45 +1,50 @@
 # TODO add comments
 
 #====================================================================
+# General New Testament constants
+#====================================================================
+
+NT_BOOKS = (
+    ('Matt',   (25, 23, 17, 25, 48, 34, 29, 34, 38, 42, 30, 50, 58, 36,
+                39, 28, 27, 35, 30, 34, 46, 46, 39, 51, 46, 75, 66, 20)),
+    ('Mark',   (45, 28, 35, 41, 43, 56, 37, 38, 50, 52, 33, 44, 37, 72,
+                47, 20)),
+    ('Luke',   (80, 52, 38, 44, 39, 49, 50, 56, 62, 42, 54, 59, 35, 35,
+                32, 31, 37, 43, 48, 47, 38, 71, 56, 53)),
+    ('John',   (51, 25, 36, 54, 47, 71, 53, 59, 41, 42, 57, 50, 38, 31,
+                27, 33, 26, 40, 42, 31, 25)),
+    ('Acts',   (26, 47, 26, 37, 42, 15, 60, 40, 43, 48, 30, 25, 52, 28,
+                41, 40, 34, 28, 41, 38, 40, 30, 35, 27, 27, 32, 44, 31)),
+    ('Rom',    (32, 29, 31, 25, 21, 23, 25, 39, 33, 21, 36, 21, 14, 23,
+                33, 27)),
+    ('1Cor',   (31, 16, 23, 21, 13, 20, 40, 13, 27, 33, 34, 31, 13, 40,
+                58, 24)),
+    ('2Cor',   (24, 17, 18, 18, 21, 18, 16, 24, 15, 18, 33, 21, 14)),
+    ('Gal',    (24, 21, 29, 31, 26, 18)),
+    ('Eph',    (23, 22, 21, 32, 33, 24)),
+    ('Phil',   (30, 30, 21, 23)),
+    ('Col',    (29, 23, 25, 18)),
+    ('1Thess', (10, 20, 13, 18, 28)),
+    ('2Thess', (12, 17, 18)),
+    ('1Tim',   (20, 15, 16, 16, 25, 21)),
+    ('2Tim',   (18, 26, 17, 22)),
+    ('Titus',  (16, 15, 15)),
+    ('Phlm',   (25,)),
+    ('Heb',    (14, 18, 19, 16, 14, 20, 28, 13, 28, 39, 40, 29, 25)),
+    ('James',  (27, 26, 18, 17, 20)),
+    ('1Peter', (25, 25, 22, 19, 14)),
+    ('2Peter', (21, 22, 18)),
+    ('1John',  (10, 29, 24, 21, 21)),
+    ('2John',  (13,)),
+    ('3John',  (15,)),
+    ('Jude',   (25,)),
+    ('Rev',    (20, 29, 22, 11, 14, 17, 17, 13, 21, 11, 19, 17, 18, 20,
+                8, 21, 18, 24, 21, 15, 27, 20)))
+
+#====================================================================
 # SyrNT constants
 #====================================================================
 class SyrNT:
-    NT_BOOKS = (
-        ('Matt',   (25, 23, 17, 25, 48, 34, 29, 34, 38, 42, 30, 50, 58, 36,
-                    39, 28, 27, 35, 30, 34, 46, 46, 39, 51, 46, 75, 66, 20)),
-        ('Mark',   (45, 28, 35, 41, 43, 56, 37, 38, 50, 52, 33, 44, 37, 72,
-                    47, 20)),
-        ('Luke',   (80, 52, 38, 44, 39, 49, 50, 56, 62, 42, 54, 59, 35, 35,
-                    32, 31, 37, 43, 48, 47, 38, 71, 56, 53)),
-        ('John',   (51, 25, 36, 54, 47, 71, 53, 59, 41, 42, 57, 50, 38, 31,
-                    27, 33, 26, 40, 42, 31, 25)),
-        ('Acts',   (26, 47, 26, 37, 42, 15, 60, 40, 43, 48, 30, 25, 52, 28,
-                    41, 40, 34, 28, 41, 38, 40, 30, 35, 27, 27, 32, 44, 31)),
-        ('Rom',    (32, 29, 31, 25, 21, 23, 25, 39, 33, 21, 36, 21, 14, 23,
-                    33, 27)),
-        ('1Cor',   (31, 16, 23, 21, 13, 20, 40, 13, 27, 33, 34, 31, 13, 40,
-                    58, 24)),
-        ('2Cor',   (24, 17, 18, 18, 21, 18, 16, 24, 15, 18, 33, 21, 14)),
-        ('Gal',    (24, 21, 29, 31, 26, 18)),
-        ('Eph',    (23, 22, 21, 32, 33, 24)),
-        ('Phil',   (30, 30, 21, 23)),
-        ('Col',    (29, 23, 25, 18)),
-        ('1Thess', (10, 20, 13, 18, 28)),
-        ('2Thess', (12, 17, 18)),
-        ('1Tim',   (20, 15, 16, 16, 25, 21)),
-        ('2Tim',   (18, 26, 17, 22)),
-        ('Titus',  (16, 15, 15)),
-        ('Phlm',   (25,)),
-        ('Heb',    (14, 18, 19, 16, 14, 20, 28, 13, 28, 39, 40, 29, 25)),
-        ('James',  (27, 26, 18, 17, 20)),
-        ('1Peter', (25, 25, 22, 19, 14)),
-        ('2Peter', (21, 22, 18)),
-        ('1John',  (10, 29, 24, 21, 21)),
-        ('2John',  (13,)),
-        ('3John',  (15,)),
-        ('Jude',   (25,)),
-        ('Rev',    (20, 29, 22, 11, 14, 17, 17, 13, 21, 11, 19, 17, 18, 20,
-                    8, 21, 18, 24, 21, 15, 27, 20)))
 
     # SyroMorph Data format
     #
@@ -129,7 +134,7 @@ class SyrNT:
              'interrogative')       # 3 interrogative
         ),
         ('demonstrative_category',
-                                    # 13 demonstrative category
+                                # 13 demonstrative category
             ('n/a',                 # 0 n/a
              'near',                # 1 near
              'far')                 # 2 far
@@ -194,38 +199,9 @@ class SyrNT:
 # SEDRA-III constants
 #====================================================================
 class SedraIII:
-    BOOK_NAMES = {
-        52 : 'Matt',
-        53 : 'Mark',
-        54 : 'Luke',
-        55 : 'John',
-        56 : 'Acts',
-        57 : 'Rom',
-        58 : '1Cor',
-        59 : '2Cor',
-        60 : 'Gal',
-        61 : 'Eph',
-        62 : 'Phil',
-        63 : 'Col',
-        64 : '1Thess',
-        65 : '2Thess',
-        66 : '1Tim',
-        67 : '2Tim',
-        68 : 'Titus',
-        69 : 'Phlm',
-        70 : 'Heb',
-        71 : 'James',
-        72 : '1Peter',
-        73 : '2Peter',
-        74 : '1John',
-        75 : '2John',
-        76 : '3John',
-        77 : 'Jude',
-        78 : 'Rev'
-    }
 
-# ROOTS: {                        # ROOTS.TXT
-    ROOTS_ATTR = ((                     # Attributes: 16-bit intiger as follows
+    # ROOTS.TXT
+    ROOTS_ATTR = ((             # Attributes: 16-bit intiger as follows
         'SEYAME FLAG', (        # 0  SEYAME FLAG:
             'NO SEYAME',        #     0 NO SEYAME
             'SEYAME'            #     1 SEYAME
@@ -239,9 +215,8 @@ class SedraIII:
         )), (
         '<RESERVED>', None      # 3-15 <RESERVED>
     ))
-# }
-# LEXEMES: {                      # LEXEMES.TXT
-    LEXEMES_ATTR = ((                    # Attributes: 16-bit intiger as follows
+    # LEXEMES.TXT
+    LEXEMES_ATTR = ((           # Attributes: 16-bit intiger as follows
         'SEYAME FLAG', (        # 0 SEYAME FLAG:
             'NO SEYAME',        #     0 NO SEYAME
             'SEYAME'            #     1 SEYAME
@@ -271,7 +246,7 @@ class SedraIII:
             'ADVERB'            #     1101 ADVERB
         ))
     )
-    LEXEMES_FEAT = ((                    # Morphological Type: 32-bit intiger as follows
+    LEXEMES_FEAT = ((           # Morphological Type: 32-bit intiger as follows
         'First SUFFIX', (       # 0-3 First SUFFIX:
             '<NONE>',           #     0000 <NONE>
             'ToA',              #     0001 ToA
@@ -301,7 +276,7 @@ class SedraIII:
             '<NONE>',           #     00 <NONE>
             'M',                #     01 M
             'T',                #     10 T
-            '?????????',         ##              /add -HV
+            '?????????',        ##              /add -HV
         )), (
         'FIRST VOWEL', (        # 10-12 FIRST VOWEL:
             '<NONE>',           #     000 <NONE>
@@ -327,7 +302,7 @@ class SedraIII:
             'i',                ##    100 i
             'u'                 ##    101 u
         )), (
-        'FOURTH VOWEL', (        # 19-21 FOURTH VOWEL: as above
+        'FOURTH VOWEL', (       # 19-21 FOURTH VOWEL: as above
             '<NONE>',           ##    000 <NONE>
             'a',                ##    001 a
             'o',                ##    010 o
@@ -365,9 +340,8 @@ class SedraIII:
             'ETHPALPAL'         #     1110 ETHPALPAL
         ))
     )
-# }
-# WORDS: {                        # WORDS
-    WORDS_ATTR = ((                     # Attributes: 16-bit intiger as follows
+    # WORDS.TXT
+    WORDS_ATTR = ((             # Attributes: 16-bit intiger as follows
         'SEYAME FLAG', (        # 0 SEYAME FLAG:
             'NO SEYAME',        #     0 NO SEYAME
             'SEYAME'            #     1 SEYAME
@@ -384,7 +358,7 @@ class SedraIII:
                                 #     1 YES, i.e. = word represents lexeme
         ))
     )
-    WORDS_FEAT = ((                    # Morphological Features: 32-bit intiger as follows
+    WORDS_FEAT = ((             # Morphological Features: 32-bit intiger as follows
         '<RESERVED>', None      # 0-1 <RESERVED>
         ), (
         'SUFFIX GENDER', (      # 2-3 SUFFIX GENDER:
@@ -476,9 +450,8 @@ class SedraIII:
             'ETHAPHAL'          #     011100 ETHAPHAL
         ))
     )
-# }
-# ENGLISH: {                      # ENGLISH
-    ENGLISH_ATTR = ((                     # Attributes: 15-bit intiger as follows:
+    # ENGLISH.TXT
+    ENGLISH_ATTR = ((           # Attributes: 15-bit intiger as follows:
         '<RESERVED>', None      # 0 <RESERVED>
         ), (
         'COMMENT POSITION', (   # 1 COMMENT POSITION:
@@ -515,29 +488,28 @@ class SedraIII:
             'MASCULINE',        ##    10 MASCULINE
             'FEMININE'          ##    11 FEMININE
         )), (
-        'FORM', None               # 11-15 FORM: as above
-            # TODO: what forms are these?
-            # Below the attested values:
-            # (5 bits; the sixth bit is always 0)
-            # 000001 1
-            # 000010 2
-            # 000011 3
-            # 000100 4
-            # 000101 5
-            # 000110 6
-            # 000111 7
-            # 001000 8
-            # 001001 9
-            # 001101 13
-            # 001110 14
-            # 010000 16
-            # 010010 18
-            # 010110 22
+        'FORM', None            # 11-15 FORM: as above
+                                # TODO: what forms are these?
+                                # Below the attested values:
+                                # (5 bits; the sixth bit is always 0)
+                                # 000001 1
+                                # 000010 2
+                                # 000011 3
+                                # 000100 4
+                                # 000101 5
+                                # 000110 6
+                                # 000111 7
+                                # 001000 8
+                                # 001001 9
+                                # 001101 13
+                                # 001110 14
+                                # 010000 16
+                                # 010010 18
+                                # 010110 22
         )
     )
-# }
-# ETIMOLGY: {                     # ETIMOLGY.TXT
-    ETYMOLOGY_ATTR = ((                     # Attributes: 16-bit intigier as follows:
+    # ETIMOLGY.TXT
+    ETYMOLOGY_ATTR = ((         # Attributes: 16-bit intigier as follows:
         'LANGUAGE', (           # 0-3 LANGUAGE:
             'SYRIAC',           #     0000  SYRIAC
             'AKKADIAN',         #     0001  AKKADIAN
@@ -554,7 +526,6 @@ class SedraIII:
             'NORMAL',           #     0 NORMAL
             'PARENTHESIED'      #     1 PARENTHESIED
         )), (
-        'REST', None
+        'REST', None            # /add -HV
         )
     )
-# }

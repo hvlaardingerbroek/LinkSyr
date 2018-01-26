@@ -51,7 +51,7 @@ the description seems to apply roughly to BFBS.TXT.
 
 from __future__ import print_function
 import os
-from constants import SedraIII as c
+from constants import NT_BOOKS, SedraIII as c
 
 cfg_filename = 'linksyr.conf'
 cfg_section = 'sedra'
@@ -75,6 +75,7 @@ cfg_items = dict(cfg.items(cfg_section))
 DB_DIR = cfg_items[cfg_fields[0]]
 DB_FILES = tuple(cfg_items[s] for s in cfg_fields[1:6])
 NT_FILE = cfg_items[cfg_fields[6]]
+NT_OFFSET = 52  # starting id of NT books
 
 
 class Root:
@@ -229,7 +230,7 @@ class NTWord:
 
     @property
     def book_name(self):
-        return c.BOOK_NAMES[self.location[0]]
+        return NT_BOOKS[self.location[0]-NT_OFFSET][0]
 
     @property
     def chapter(self):

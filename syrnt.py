@@ -5,7 +5,7 @@
 from __future__ import unicode_literals, print_function
 
 import os.path
-from constants import SyrNT as c
+from constants import NT_BOOKS, SyrNT as c
 
 # Read database location from config file
 try: # allow for different module names in python 2 and 3
@@ -18,6 +18,7 @@ config.read('linksyr.conf')
 datadir = config.get('syrnt','datadir')
 filename = config.get('syrnt','filename')
 dbpath = os.path.join(datadir, filename)
+NT_OFFSET = 52  # starting id of NT books
 
 # TODO check discrepancies between SEDRA and Syromorph NT.
 # It seems that
@@ -101,7 +102,7 @@ def tag_sentences(sentences = None, tag=get_supertag):
         yield [(w, tag(a)) for w, a in s]
 
 def get_verse_labels():
-    for book_id, (book_name, chapters) in enumerate(c.NT_BOOKS, 52):
+    for book_id, (book_name, chapters) in enumerate(NT_BOOKS, NT_OFFSET):
         for chapter, versecount in enumerate(chapters, 1):
             for verse in range(1, versecount + 1):
                 yield (book_id, book_name, chapter, verse)
