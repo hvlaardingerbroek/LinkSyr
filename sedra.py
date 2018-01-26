@@ -24,6 +24,31 @@ The BFBS files contain, according to the README file,
 Although the filenames differ, besides other minor inconsistencies,
 the description seems to apply roughly to BFBS.TXT.
 """
+# The SEDRA III database is read into the variable db,
+# the New Testament text is read into the variable nt.
+# TODO
+# Not all attributes and features are clearly explained
+# in the documentation, so some research may improve
+# their usefulness.
+# TODO
+# The English and Etymology files contain references
+# to the relevant lexemes, it would be useful to add
+# references back from Lexeme and Word objects, or a
+# pivot table.
+# TODO
+# The database files are now referenced by hardcoded
+# adresses (e.g. db[2] for the Words db). That should
+# be something like db[words]. Maybe.
+# TODO
+# Add values for prefix-attribute in constants.py, and
+# find a way to reconstruct suffixes, and add relevant
+# attributes/methods to Word class.
+# TODO
+# With the prefixes and suffixes, make a supertag-method
+# for the NTWord-class.
+# TODO
+# Add extensive documentation to classes/methods.
+
 from __future__ import print_function
 import os
 from constants import SedraIII as c
@@ -185,14 +210,7 @@ class NTWord:
     def __init__(self, line):
         # self._rec_addr = line[0]  # _rec_addr is not unique, so useless
         self.location = split_loc_id(line[1])      # _loc_id
-        # self._word_addr = line[2]
-        # word_addr is a crazy encoded decimal value of two combined
-        # hexadecimal values, the first of which is always '02'
-        # (the number of the WORDS.TXT file). So to retrieve
-        # the word_id, we must convert word_addr to a hex string
-        # of eight positions, and convert the rightmost six back
-        # to decimal. The leftmost two will always be '02'.
-        self.word_id = int('{0:08x}'.format(int(line[2]))[2:], 16)
+        self.word_addr = get_word_addr(line[2])   # tuple, e.g. (2,1)
         self.attr = int(line[3])
 
     def __repr__(self):
@@ -235,11 +253,28 @@ class NTWord:
 
     @property
     def word(self):
-        return db[2][self.word_id]
+        # TODO find more elegant way to refer to WORDS db
+        return db[self.word_addr[0]][self.word_addr[1]]
+
+    # def get_supertag(self):
+    #     # TODO construct supertag
+    #     # Get prefix from Word - TODO add prefixes to constants.py
+    #     # TODO find out how to reconstruct suffix in Word from bits
+    #     return self.word
 
 
 def get_address(a):
     return int(a.split(':')[1]) if a != 'NULL' else None
+
+def get_word_addr(a):
+    # word_addr is a crazy encoded decimal value of two combined
+    # hexadecimal values, the first of which is always '02'
+    # (the number of the WORDS.TXT file). So to retrieve
+    # the word_id, we must convert word_addr to a hex string
+    # of eight positions, and convert the rightmost six back
+    # to decimal. The leftmost two will always be '02'.
+    h = '{0:08x}'.format(int(a))
+    return (int(h[:2], 16), int(h[2:], 16))
 
 def split_bits(n, groups, bits=16):
     if n<0: n+=(1<<bits) # shift bits https://stackoverflow.com/a/20768199
@@ -302,6 +337,12 @@ def read_nt_file():
         nt.append(NTWord(line))
     return sorted(nt, key=lambda w: w.location)
 
+db = read_db_files()
+nt = read_nt_file()
+
+# add variable names to access the separate db files:
+roots_db, lexemes_db, words_db, english_db, etymology_db = db
+
 def nt_verses():
     prev_verse = 1
     verse = []
@@ -313,9 +354,6 @@ def nt_verses():
         verse.append(word)
     yield verse
     # return tuple(NTWord(line) for line in read_db_file(DB_DIR, NT_FILE))
-
-db = read_db_files()
-nt = read_nt_file()
 
 def main():
     pass
