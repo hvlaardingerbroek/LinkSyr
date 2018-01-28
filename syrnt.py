@@ -37,6 +37,98 @@ NT_OFFSET = 52  # starting id of NT books
 # 782202107
 # 782202108
 
+
+class NTWord:
+    def __init__(self, w_str, location):
+        self.location = location
+        self.cons_str, a_str = w_str.split('|')
+        self.annotation = tuple( int(v) if v.isdigit() else v
+                                        for v in a_str.split('#') )
+
+    def __repr__(self):
+        return '<NTWord {0}: {1}>'.format(self.loc_str, self.cons_str)
+
+    def __str__(self):
+        return self.cons_str
+
+    @property
+    def book_id(self):
+        return self.location[0]
+
+    @property
+    def book_name(self):
+        return NT_BOOKS[self.book_id - NT_OFFSET][0]
+
+    @property
+    def chapter(self):
+        return self.location[1]
+
+    @property
+    def verse(self):
+        return self.location[2]
+
+    @property
+    def w_num(self):
+        return self.location[3]
+
+    @property
+    def loc_str(self):
+        '''Combine location elements into fixed-length string'''
+        return '{0:02}{1:02}{2:03}{3:02}'.format(*self.location)
+        # return get_loc_id(self.book_id, self.chapter, self.verse, self.w_num)
+
+    @property
+    def stem(self):
+        return self.annotation[0]
+
+    @property
+    def lexeme(self):
+        return self.annotation[1]
+
+    @property
+    def root(self):
+        return self.annotation[2]
+
+    @property
+    def prefix(self):
+        return self.annotation[3]
+
+    @property
+    def suffix(self):
+        return self.annotation[4]
+
+    @property
+    def seyame(self):
+        return self.annotation[5]
+
+    @property
+    def ann_values(self):
+        '''Return dictionary with descriptive key:value annotations'''
+        # This can be done in a dict comprehension from Python 2.7 onward,
+        # but 2.6 needs dict() constructor (https://stackoverflow.com/a/1747827)
+        return dict( (l[0], (l[1][n]) if l[1] else n)
+                    for l, n in zip(c.ANNOTATIONS, self.annotation) )
+
+    @property
+    def postag(self):
+        # Part of Speech, or grammatical category, is annotation field 17
+        return c.ANNOTATIONS[17][1][self.annotation[17]]
+
+
+def get_verse_labels():
+    for book_id, (book_name, chapters) in enumerate(NT_BOOKS, NT_OFFSET):
+        for chapter, versecount in enumerate(chapters, 1):
+            for verse in range(1, versecount + 1):
+                yield (book_name, book_id, chapter, verse)
+
+def nt_verses():
+    from io import open # This is for python 2.6 (TODO: why?)
+    with open(dbpath) as f:
+        for verse_label, line in zip(get_verse_labels(), f):
+            yield (verse_label,
+                   [ NTWord(w_str, verse_label[1:] + (w_num,))
+                     for w_num, w_str in enumerate(line.strip().split(), 1) ])
+
 def maketrans(s1, s2):
     '''Make a simple translation table'''
     # There are more sophisticated maketrans-functions (str.maketrans()
@@ -50,82 +142,24 @@ towit = maketrans('AOKY;CEI/XW','>WXVJK<PYQC')
 tosyr = maketrans('ABGDHOZKY;CLMNSEI/XRWT','ܐܒܓܕܗܘܙܚܛܝܟܠܡܢܣܥܦܨܩܪܫܬ')
 notr = maketrans('','')
 
-def get_loc_id(book_id, chapter, verse, word_num):
-    '''Combine location elements into fixed-length string'''
-    return '{0:02}{1:02}{2:03}{3:02}'.format(book_id, chapter, verse, word_num)
-
-def split_loc_id(loc_id):
-    '''Split loc_id into elements: '250100101' -> (25, 1, 1, 1)'''
-    loc = [loc_id[:2], loc_id[2:4], loc_id[4:7], loc_id[7:]]
-    return tuple(int(a) for a in loc)
-
-def get_ann_values(a):
-    '''Return dictionary with descriptive key:value annotations'''
-    # a: annotation; l: ?; n: ?
-    # This can be done in a dict comprehension from Python 2.7 onward,
-    # but 2.6 needs dict() constructor (https://stackoverflow.com/a/1747827)
-    return dict( (l[0], (l[1][n]) if l[1] else n)
-                    for l, n in zip(c.ANNOTATIONS, a) )
-
-def aparse(a_str):
-    '''Split annotation string into fields and return as tuple'''
-    # a_str: annotation string; v: value
-    return tuple( int(v) if v.isdigit() else v for v in a_str.split('#') )
-
-def wparse(w):
-    '''Split word field into word string and annotation, return tuple'''
-    cons_str, a_str = w.split('|')
-    return (cons_str, aparse(a_str))
-
-def get_supertag(a):
-    # a: annotation
-    # prefix is annotation field 3, suffix is annotation field 4
-    PoS = get_postag(a)
-    prefix = a[3]+'+' if a[3] else ''
-    suffix = '+'+a[4] if a[4] else ''
-    return prefix+PoS+suffix
-
-def get_postag(a):
-    # Part of Speech, or grammatical category, is annotation field 17
-    return c.ANNOTATIONS[17][1][a[17]]
-
-def get_sentences(tr=towit):
-    from io import open # This is for python 2.6 (TODO: why?)
-    with open(dbpath) as f:
-        for line in f:
-            yield [wparse(w) for w in line.strip().translate(tr).split()]
-
-def tag_sentences(sentences = None, tag=get_supertag):
-    if sentences is None:
-        sentences = get_sentences()
-    for s in sentences:
-        yield [(w, tag(a)) for w, a in s]
-
-def get_verse_labels():
-    for book_id, (book_name, chapters) in enumerate(NT_BOOKS, NT_OFFSET):
-        for chapter, versecount in enumerate(chapters, 1):
-            for verse in range(1, versecount + 1):
-                yield (book_id, book_name, chapter, verse)
-
-def outputverses(tr=tosyr):
-    for l,s in zip(get_verse_labels(), get_sentences(tr=notr)):
-        ' '.join([w[0] for w in s]).translate(tr)
-        yield (l, ' '.join([w[0] for w in s]).translate(tr))
-
-def print_nt():
-    # nt = []
+def print_nt(tr=towit):
     pl = None # pl: previous label
-    for l,v in outputverses():
+    for l, v in nt_verses():
         if pl is None or pl[1] != l[1] or pl[2] != l[2]:
             if pl is not None:  # no newline before first chapter
                 yield ''
                 # nt.append('')   # add newline before chapter label
-            yield '{0} chapter {1}'.format(l[1], l[2])
-            # nt.append('{0} chapter {1}'.format(l[1], l[2])) # add chapter label
+            yield '{0} chapter {1}'.format(l[0], l[2])
         pl = l
-        yield '{0:2} {1}'.format(l[3], v)
-        # nt.append('{0:2} {1}'.format(l[3], v))
-    # return '\n'.join(nt)
+        yield '{0:2} {1}'.format(l[3],
+                ' '.join([w.cons_str.translate(tr) for w in v]))
+
+def get_supertag(w):
+    return '+'.join([e for e in (w.prefix, w.postag, w.suffix) if e])
+
+def tag_sentences(tr=towit, tag=get_supertag):
+    for l, s in nt_verses():
+        yield [(w.cons_str.translate(tr), tag(w)) for w in s]
 
 def main():
     for line in print_nt():
