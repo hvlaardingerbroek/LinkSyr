@@ -5,6 +5,7 @@
 from __future__ import unicode_literals, print_function
 
 import os.path
+from collections import namedtuple
 from constants import NT_BOOKS, SyrNT as c
 
 # Read database location from config file
@@ -39,80 +40,38 @@ NT_OFFSET = 52  # starting id of NT books
 
 
 class NTWord:
+
+    Annotation = namedtuple('Annotation',
+                    [f[0].replace(' ','_') for f in c.ANNOTATIONS])
+    Location = namedtuple('Location',
+                    ['book_name', 'book_id', 'chapter', 'verse', 'w_num'])
+
     def __init__(self, w_str, location):
-        self.location = location
         self.cons_str, a_str = w_str.split('|')
-        self.annotation = tuple( int(v) if v.isdigit() else v
-                                        for v in a_str.split('#') )
+        self.location = NTWord.Location(*location)
+        self.annotation = NTWord.Annotation(*[int(v) if v.isdigit() else v
+                            for v in a_str.split('#')])
+        self.ann_values = NTWord.Annotation(*[f[1][v] if f[1] else v
+                            for f, v in zip(c.ANNOTATIONS, self.annotation)])
+        # some shortcuts:
+        self.stem   = self.ann_values.stem
+        self.lexeme = self.ann_values.lexeme
+        self.root   = self.ann_values.root
+        self.prefix = self.ann_values.prefix
+        self.suffix = self.ann_values.suffix
+        self.seyame = self.ann_values.seyame
+        self.postag = self.ann_values.grammatical_category
 
     def __repr__(self):
-        return '<NTWord {0}: {1}>'.format(self.loc_str, self.cons_str)
+        return '<NTWord {0}: {1}>'.format(self.get_loc_str(), self.cons_str)
 
     def __str__(self):
         return self.cons_str
 
-    @property
-    def book_id(self):
-        return self.location[0]
-
-    @property
-    def book_name(self):
-        return NT_BOOKS[self.book_id - NT_OFFSET][0]
-
-    @property
-    def chapter(self):
-        return self.location[1]
-
-    @property
-    def verse(self):
-        return self.location[2]
-
-    @property
-    def w_num(self):
-        return self.location[3]
-
-    @property
-    def loc_str(self):
+    def get_loc_str(self):
         '''Combine location elements into fixed-length string'''
-        return '{0:02}{1:02}{2:03}{3:02}'.format(*self.location)
+        return '{0:02}{1:02}{2:03}{3:02}'.format(*self.location[1:])
         # return get_loc_id(self.book_id, self.chapter, self.verse, self.w_num)
-
-    @property
-    def stem(self):
-        return self.annotation[0]
-
-    @property
-    def lexeme(self):
-        return self.annotation[1]
-
-    @property
-    def root(self):
-        return self.annotation[2]
-
-    @property
-    def prefix(self):
-        return self.annotation[3]
-
-    @property
-    def suffix(self):
-        return self.annotation[4]
-
-    @property
-    def seyame(self):
-        return self.annotation[5]
-
-    @property
-    def ann_values(self):
-        '''Return dictionary with descriptive key:value annotations'''
-        # This can be done in a dict comprehension from Python 2.7 onward,
-        # but 2.6 needs dict() constructor (https://stackoverflow.com/a/1747827)
-        return dict( (l[0], (l[1][n]) if l[1] else n)
-                    for l, n in zip(c.ANNOTATIONS, self.annotation) )
-
-    @property
-    def postag(self):
-        # Part of Speech, or grammatical category, is annotation field 17
-        return c.ANNOTATIONS[17][1][self.annotation[17]]
 
 
 def get_verse_labels():
@@ -122,12 +81,17 @@ def get_verse_labels():
                 yield (book_name, book_id, chapter, verse)
 
 def nt_verses():
-    from io import open # This is for python 2.6 (TODO: why?)
+    from io import open # This is for python 2.6
     with open(dbpath) as f:
         for verse_label, line in zip(get_verse_labels(), f):
             yield (verse_label,
-                   [ NTWord(w_str, verse_label[1:] + (w_num,))
+                   [ NTWord(w_str, verse_label + (w_num,))
                      for w_num, w_str in enumerate(line.strip().split(), 1) ])
+
+def nt_words():
+    for v in nt_verses():
+        for w in v[1]:
+            yield w
 
 def maketrans(s1, s2):
     '''Make a simple translation table'''
