@@ -202,30 +202,30 @@ class SedraIII:
 
     # ROOTS.TXT
     ROOTS_ATTR = ((             # Attributes: 16-bit intiger as follows
-        'SEYAME FLAG', (        # 0  SEYAME FLAG:
+        'SEYAME FLAG', 1, (     # 0  SEYAME FLAG:
             'NO SEYAME',        #     0 NO SEYAME
             'SEYAME'            #     1 SEYAME
         )), (
-        'ROOT TYPE', (          # 1-2 ROOT TYPE:
+        'ROOT TYPE', 2, (       # 1-2 ROOT TYPE:
             'NORMAL',           #     00 NORMAL
             'PARETHESIED',      #     01 PARETHESIED
             'BRACKETED',        #     10 BRACKETED
             'HIGH FREQUENCY ROOT, e.g. propositons'
                                 #     11 HIGH FREQUENCY ROOT, e.g. propositons
         )), (
-        '<RESERVED>', None      # 3-15 <RESERVED>
+        '<RESERVED>', 13, None  # 3-15 <RESERVED>
     ))
     # LEXEMES.TXT
     LEXEMES_ATTR = ((           # Attributes: 16-bit intiger as follows
-        'SEYAME FLAG', (        # 0 SEYAME FLAG:
+        'SEYAME FLAG', 1, (     # 0 SEYAME FLAG:
             'NO SEYAME',        #     0 NO SEYAME
             'SEYAME'            #     1 SEYAME
         )), (
-        'WORD TYPE', (          # 1 WORD TYPE:
+        'WORD TYPE', 1, (       # 1 WORD TYPE:
             'NORMAL',           #     0 NORMAL
             'PARENTHESISED'     #     1 PARENTHESISED
         )), (
-        'GRAMMATICAL CATEGORY', (
+        'GRAMMATICAL CATEGORY', 4, (
                                 # 2-5 GRAMMATICAL CATEGORY:
             'VERB',             #     0000 VERB
             'PARTICIPLE ADJECTIVE',
@@ -244,10 +244,12 @@ class SedraIII:
             'ADJECTIVE OF PLACE',
                                 #     1100 ADJECTIVE OF PLACE
             'ADVERB'            #     1101 ADVERB
-        ))
+        )), (
+        'REST', 10, None        ##              /add -HV
+        )
     )
     LEXEMES_FEAT = ((           # Morphological Type: 32-bit intiger as follows
-        'First SUFFIX', (       # 0-3 First SUFFIX:
+        'First SUFFIX', 4, (    # 0-3 First SUFFIX:
             '<NONE>',           #     0000 <NONE>
             'ToA',              #     0001 ToA
             'YoA',              #     0010 YoA
@@ -262,23 +264,23 @@ class SedraIII:
             'QoNoA',            #     1011 QoNoA
             'i;N'               #     1100 i;N
         )), (
-        'SECOND SUFFIX', (      # 4-5 SECOND SUFFIX:
+        'SECOND SUFFIX', 2, (   # 4-5 SECOND SUFFIX:
             '<NONE>',           #     00 <NONE>
             'oYoA',             #     01 oYoA
             'iYToA'             #     10 iYToA
         )), (
-        'THIRD SUFFIX', (       # 6-7 THIRD SUFFIX:
+        'THIRD SUFFIX', 2, (    # 6-7 THIRD SUFFIX:
             '<NONE>',           #     00 <NONE>
             'uOToA',            #     01 uOToA
             'oAiYT'             #     10 oAiYT
         )), (
-        'PREFIX', (             # 8-9 PREFIX:
+        'PREFIX', 2, (          # 8-9 PREFIX:
             '<NONE>',           #     00 <NONE>
             'M',                #     01 M
             'T',                #     10 T
             '?????????',        ##              /add -HV
         )), (
-        'FIRST VOWEL', (        # 10-12 FIRST VOWEL:
+        'FIRST VOWEL', 3, (     # 10-12 FIRST VOWEL:
             '<NONE>',           #     000 <NONE>
             'a',                #     001 a
             'o',                #     010 o
@@ -286,7 +288,7 @@ class SedraIII:
             'i',                #     100 i
             'u'                 #     101 u
         )), (
-        'SECOND VOWEL', (       # 13-15 SECOND VOWEL: as above
+        'SECOND VOWEL', 3, (    # 13-15 SECOND VOWEL: as above
             '<NONE>',           ##    000 <NONE>
             'a',                ##    001 a
             'o',                ##    010 o
@@ -294,7 +296,7 @@ class SedraIII:
             'i',                ##    100 i
             'u'                 ##    101 u
         )), (
-        'THIRD VOWEL', (        # 16-18 THIRD VOWEL: as above
+        'THIRD VOWEL', 3, (     # 16-18 THIRD VOWEL: as above
             '<NONE>',           ##    000 <NONE>
             'a',                ##    001 a
             'o',                ##    010 o
@@ -302,7 +304,7 @@ class SedraIII:
             'i',                ##    100 i
             'u'                 ##    101 u
         )), (
-        'FOURTH VOWEL', (       # 19-21 FOURTH VOWEL: as above
+        'FOURTH VOWEL', 3, (    # 19-21 FOURTH VOWEL: as above
             '<NONE>',           ##    000 <NONE>
             'a',                ##    001 a
             'o',                ##    010 o
@@ -310,10 +312,9 @@ class SedraIII:
             'i',                ##    100 i
             'u'                 ##    101 u
         )), (
-        'NUM_VOWELS', None
+        'NUM_VOWELS', 3, None   # 22-24 Total no of vowels in lexeme: 0-7
         ), (
-                                # 22-24 Total no of vowels in lexeme: 0-7
-        'RADICAL TYPE', (       # 25-27 RADICAL TYPE:
+        'RADICAL TYPE', 3, (    # 25-27 RADICAL TYPE:
             '<NONE>',           #     000 <NONE>
             'BI',               #     001 BI
             'TRI',              #     010 TRI
@@ -322,7 +323,7 @@ class SedraIII:
             'SIX_RADICAL',      #     101 SIX_RADICAL
             'COMPOUND'          #     110 COMPOUND
         )), (
-        'FORM', (               # 28-31 FORM:
+        'FORM', 4, (            # 28-31 FORM:
             '<NONE>',           #     0000 <NONE>
             'PEAL',             #     0001 PEAL
             'ETHPEAL',          #     0010 ETHPEAL
@@ -337,77 +338,81 @@ class SedraIII:
             'P',                #     1011 P
             'ETHP',             #     1100 ETHP
             'PALPEL',           #     1101 PALPEL
-            'ETHPALPAL'         #     1110 ETHPALPAL
+            'ETHPALPAL',        #     1110 ETHPALPAL
+            '?????????',        ##              /add -HV
         ))
     )
     # WORDS.TXT
     WORDS_ATTR = ((             # Attributes: 16-bit intiger as follows
-        'SEYAME FLAG', (        # 0 SEYAME FLAG:
+        'SEYAME FLAG', 1, (     # 0 SEYAME FLAG:
             'NO SEYAME',        #     0 NO SEYAME
             'SEYAME'            #     1 SEYAME
         )), (
-        'ignore', None          # 1-4 ignore
+        'ignore', 4, None       # 1-4 ignore
         ), (
-        'ENCLITIC FLAG', (      # 5 ENCLITIC FLAG:
+        'ENCLITIC FLAG', 1, (   # 5 ENCLITIC FLAG:
             'NOT ENCLITIC',     #     0 NOT ENCLITIC
             'ENCLITIC'          #     1 ENCLITIC
         )), (
-        'LEXEME FLAG', (        # 6 LEXEME FLAG:
+        'LEXEME FLAG', 1, (     # 6 LEXEME FLAG:
             'NO',               #     0 NO
             'YES, i.e. = word represents lexeme'
                                 #     1 YES, i.e. = word represents lexeme
-        ))
+        )), (
+        'REST', 9, None         ##              /add -HV
+        )
     )
     WORDS_FEAT = ((             # Morphological Features: 32-bit intiger as follows
-        '<RESERVED>', None      # 0-1 <RESERVED>
+        '<RESERVED>', 2, None   # 0-1 <RESERVED>
         ), (
-        'SUFFIX GENDER', (      # 2-3 SUFFIX GENDER:
+        'SUFFIX GENDER', 2, (   # 2-3 SUFFIX GENDER:
             'COMMON or <NONE>', #     00 COMMON or <NONE>
             'MASCULINE',        #     01 MASCULINE
             'SUFFEMININE'       #     10 SUFFEMININE
         )), (
-        'SUFFIX PERSON', (      # 4-5 SUFFIX PERSON:
+        'SUFFIX PERSON', 2, (   # 4-5 SUFFIX PERSON:
             '<NONE>',           #     00 <NONE>
             'THIRD',            #     01 THIRD
             'SECOND',           #     10 SECOND
             'FIRST'             #     11 FIRST
         )), (
-        'SUFFIX NUMBER', (      # 6 SUFFIX NUMBER:
+        'SUFFIX NUMBER', 1, (   # 6 SUFFIX NUMBER:
             'SINGULAR or <NONE>',
                                 #     0 SINGULAR or <NONE>
             'PLURAL'            #     1 PLURAL
         )), (
-        'SUFFIX/CONTRACTION', ( # 7-8 SUFFIX/CONTRACTION:
+        'SUFFIX/CONTRACTION', 2, (
+                                # 7-8 SUFFIX/CONTRACTION:
             '<NONE>',           #     00 <NONE>
             'SUFFIX',           #     01 SUFFIX
             'CONTRACTION'       #     10 CONTRACTION
         )), (
-        'PREFIX CODE', None     # 9-14 PREFIX CODE: 0-63
+        'PREFIX CODE', 6, None  # 9-14 PREFIX CODE: 0-63
         ), (
-        'GENDER', (             # 15-16 GENDER:
+        'GENDER', 2, (          # 15-16 GENDER:
             '<NONE>',           #     00 <NONE>
             'COMMON',           #     01 COMMON
             'MASCULINE',        #     10 MASCULINE
             'FEMININE'          #     11 FEMININE
         )), (
-        'PERSON', (             # 17-18 PERSON:
+        'PERSON', 2, (          # 17-18 PERSON:
             '<NONE>',           #     00 <NONE>
             'THIRD',            #     01 THIRD
             'SECOND',           #     10 SECOND
             'FIRST'             #     11 FIRST
         )), (
-        'NUMBER', (             # 19-20 NUMBER:
+        'NUMBER', 2, (          # 19-20 NUMBER:
             '<NONE>',           #     00 <NONE>
             'SINGULAR',         #     01 SINGULAR
             'PLURAL'            #     10 PLURAL
         )), (
-        'STATE', (              # 21-22 STATE:
+        'STATE', 2, (           # 21-22 STATE:
             '<NONE>',           #     00 <NONE>
             'ABSOLUTE',         #     01 ABSOLUTE
             'CONSTRUCT',        #     10 CONSTRUCT
             'EMPHATIC'          #     11 EMPHATIC
         )), (
-        'TENSE', (              # 23-25 TENSE:
+        'TENSE', 3, (           # 23-25 TENSE:
             '<NONE>',           #     000 <NONE>
             'PERFECT',          #     001 PERFECT
             'IMPERFECT',        #     010 IMPERFECT
@@ -418,7 +423,7 @@ class SedraIII:
                                 #     110 PASSIVE_PARTICIPLE
             'PARTICIPLES'       #     111 PARTICIPLES
         )), (
-        'FORM', (               # 26-31 FORM:
+        'FORM', 6, (            # 26-31 FORM:
             '<NONE>',           #     000000 <NONE>
             'PEAL',             #     000001 PEAL
             'ETHPEAL',          #     000010 ETHPEAL
@@ -452,65 +457,67 @@ class SedraIII:
     )
     # ENGLISH.TXT
     ENGLISH_ATTR = ((           # Attributes: 15-bit intiger as follows:
-        '<RESERVED>', None      # 0 <RESERVED>
+        '<RESERVED>', 1, None   # 0 <RESERVED>
         ), (
-        'COMMENT POSITION', (   # 1 COMMENT POSITION:
+        'COMMENT POSITION', 1, (# 1 COMMENT POSITION:
             'COMMENT BEFORE MEANING',
                                 #     0 COMMENT BEFORE MEANING
             'COMMENT AFTER MEANING'
                                 #     1 COMMENT AFTER MEANING
         )), (
-        'COMMENT FONT', (       # 2 COMMENT FONT:
+        'COMMENT FONT', 1, (    # 2 COMMENT FONT:
             'NORMAL',           #     0 NORMAL
             'ITALIC'            #     1 ITALIC
         )), (
-        'STRING BEFORE FONT', ( # 3 STRING BEFORE FONT: as above
+        'STRING BEFORE FONT', 1, (
+                                # 3 STRING BEFORE FONT: as above
             'NORMAL',           ##    0 NORMAL
             'ITALIC'            ##    1 ITALIC
         )), (
-        'STRING AFTER FONT', (  # 4 STRING AFTER FONT: as above
+        'STRING AFTER FONT', 1, (
+                                # 4 STRING AFTER FONT: as above
             'NORMAL',           ##    0 NORMAL
             'ITALIC'            ##    1 ITALIC
         )), (
-        'VERB TYPE', (          # 5-6 VERB TYPE:
+        'VERB TYPE', 2, (       # 5-6 VERB TYPE:
             '<NONE>',           #     00 <NONE>
             'TRANSITIVE',       #     01 TRANSITIVE
             'INTRANSITIVE'      #     10 INTRANSITIVE
         )), (
-        'NUMBER', (             # 7-8 NUMBER: as above
+        'NUMBER', 2, (          # 7-8 NUMBER: as above
             '<NONE>',           ##    00 <NONE>
             'SINGULAR',         ##    01 SINGULAR
             'PLURAL'            ##    10 PLURAL
         )), (
-        'GENDER', (             # 9-10 GENDER: as above
+        'GENDER', 2, (          # 9-10 GENDER: as above
             '<NONE>',           ##    00 <NONE>
             'COMMON',           ##    01 COMMON
             'MASCULINE',        ##    10 MASCULINE
             'FEMININE'          ##    11 FEMININE
         )), (
-        'FORM', None            # 11-15 FORM: as above
-                                # TODO: what forms are these?
-                                # Below the attested values:
-                                # (5 bits; the sixth bit is always 0)
-                                # 000001 1
-                                # 000010 2
-                                # 000011 3
-                                # 000100 4
-                                # 000101 5
-                                # 000110 6
-                                # 000111 7
-                                # 001000 8
-                                # 001001 9
-                                # 001101 13
-                                # 001110 14
-                                # 010000 16
-                                # 010010 18
-                                # 010110 22
+        'FORM', 5, None         # 11-15 FORM: as above
+                                ## TODO: what forms are these?
+                                ## Below the attested values:
+                                ## (5 bits; the sixth bit is always 0)
+                                ## 000001  1
+                                ## 000010  2
+                                ## 000011  3
+                                ## 000100  4
+                                ## 000101  5
+                                ## 000110  6
+                                ## 000111  7
+                                ## 001000  8
+                                ## 001001  9
+                                ## 001101 13
+                                ## 001110 14
+                                ## 010000 16
+                                ## 010010 18
+                                ## 010110 22
         )
     )
     # ETIMOLGY.TXT
     ETYMOLOGY_ATTR = ((         # Attributes: 16-bit intigier as follows:
-        'LANGUAGE', (           # 0-3 LANGUAGE:
+        'LANGUAGE', 4, (        # 0-3 LANGUAGE:
             'SYRIAC',           #     0000  SYRIAC
             'AKKADIAN',         #     0001  AKKADIAN
             'ARAMAIC',          #     0010  ARAMAIC
@@ -522,10 +529,10 @@ class SedraIII:
             'PERSIAN',          #     1000  PERSIAN
             'SANSKRIT'          #     1001  SANSKRIT
         )), (
-        'TYPE', (               # 4 TYPE:
+        'TYPE', 1, (            # 4 TYPE:
             'NORMAL',           #     0 NORMAL
             'PARENTHESIED'      #     1 PARENTHESIED
         )), (
-        'REST', None            # /add -HV
+        'REST', 11, None        ##              /add -HV
         )
     )
