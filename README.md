@@ -11,15 +11,19 @@ Make sure to copy the linksyr.conf.sample to linksyr.conf, updated with the full
 The SEDRAIII database seems to be unavailable on the Sedra website. This version was taken from https://github.com/peshitta/sedrajs/tree/master/sedra.
 
 Usage:
+```
 import sedra
 nt = sedra.BFBS()
+```
 
 ## SyrNT
 This is the file that came shipped with the Syromorph software. The NT data seems almost identical with that of SEDRAIII, but lacks details like vocalized forms, glossary and etymology. It is however much easier to interpret.
 
 Usage:
+```
 import syrnt
 nt = syrnt.Syrnt()
+```
 
 ## Transcription
 Default transcription for both is the WIT transcription used at ETCBC.
