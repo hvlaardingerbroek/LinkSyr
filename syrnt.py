@@ -38,6 +38,60 @@ NT_OFFSET = 52  # starting id of NT books
 # 782202107
 # 782202108
 
+# helper functions
+
+def maketrans(s1, s2):
+    '''Make a simple translation table'''
+    # There are more sophisticated maketrans-functions (str.maketrans()
+    # in python 3 and string.maketrans() in python 2, but they are not
+    # compatible. The dictionary works in all versions from at least 2.6)
+    return dict(zip([ord(a) for a in s1], [ord(a) for a in s2]))
+
+# translation tables:
+# source is always SEDRA transcription, so only need to specify 'to'.
+towit = maketrans('AOKY;CEI/XW','>WXVJK<PYQC')
+tosyr = maketrans('ABGDHOZKY;CLMNSEI/XRWT','ܐܒܓܕܗܘܙܚܛܝܟܠܡܢܣܥܦܨܩܪܫܬ')
+notr = maketrans('','')
+
+def get_verse_labels():
+    for book_id, (book_name, chapters) in enumerate(NT_BOOKS, NT_OFFSET):
+        for chapter, versecount in enumerate(chapters, 1):
+            for verse in range(1, versecount + 1):
+                yield (book_name, book_id, chapter, verse)
+
+def nt_verses(tr=towit, label = False):
+    from io import open # This is for python 2.6
+    with open(dbpath) as f:
+        for verse_label, line in zip(get_verse_labels(), f):
+            verse = [NTWord(w_str, verse_label + (w_num,), tr)
+                     for w_num, w_str in enumerate(line.strip().split(), 1)]
+            yield (verse_label, verse) if label else verse
+
+def nt_words(tr=towit):
+    for v in nt_verses(tr):
+        for w in v:
+            yield w
+
+def print_nt(tr=towit):
+    pl = None # pl: previous label
+    for l, v in nt_verses(tr, label = True):
+        if pl is None or pl[1] != l[1] or pl[2] != l[2]:
+            if pl is not None:  # no newline before first chapter
+                yield ''
+                # nt.append('')   # add newline before chapter label
+            yield '{0} chapter {1}'.format(l[0], l[2])
+        pl = l
+        yield '{0:2} {1}'.format(l[3], ' '.join([w.cons_str for w in v]))
+
+def get_supertag(w):
+    return '+'.join([e for e in (w.prefix, w.postag, w.suffix) if e])
+
+def tag_sentences(tag=get_supertag):
+    for s in nt_verses():
+        yield [(w.cons_str, tag(w)) for w in s]
+
+
+# class NTWord
 
 class NTWord:
 
@@ -46,7 +100,9 @@ class NTWord:
     Location = namedtuple('Location',
                     ['book_name', 'book_id', 'chapter', 'verse', 'w_num'])
 
-    def __init__(self, w_str, location):
+    def __init__(self, w_str, location, tr):
+        if tr is not None:
+            w_str = w_str.translate(tr)
         self.cons_str, a_str = w_str.split('|')
         self.location = NTWord.Location(*location)
         self.annotation = NTWord.Annotation(*[int(v) if v.isdigit() else v
@@ -63,7 +119,7 @@ class NTWord:
         self.postag = self.ann_values.grammatical_category
 
     def __repr__(self):
-        return '<NTWord {0}: {1}>'.format(self.get_loc_str(), self.cons_str)
+        return '<NTWord {0}: "{1}">'.format(self.get_loc_str(), self.cons_str)
 
     def __str__(self):
         return self.cons_str
@@ -74,59 +130,8 @@ class NTWord:
         # return get_loc_id(self.book_id, self.chapter, self.verse, self.w_num)
 
 
-def get_verse_labels():
-    for book_id, (book_name, chapters) in enumerate(NT_BOOKS, NT_OFFSET):
-        for chapter, versecount in enumerate(chapters, 1):
-            for verse in range(1, versecount + 1):
-                yield (book_name, book_id, chapter, verse)
-
-def nt_verses():
-    from io import open # This is for python 2.6
-    with open(dbpath) as f:
-        for verse_label, line in zip(get_verse_labels(), f):
-            yield (verse_label,
-                   [ NTWord(w_str, verse_label + (w_num,))
-                     for w_num, w_str in enumerate(line.strip().split(), 1) ])
-
-def nt_words():
-    for v in nt_verses():
-        for w in v[1]:
-            yield w
-
-def maketrans(s1, s2):
-    '''Make a simple translation table'''
-    # There are more sophisticated maketrans-functions (str.maketrans()
-    # in python 3 and string.maketrans() in python 2, but they are not
-    # compatible. The dictionary works in all versions from at least 2.6)
-    return dict(zip([ord(a) for a in s1], [ord(a) for a in s2]))
-
-# translation tables:
-# source is always SEDRA transcription, so only need to specify 'to'.
-towit = maketrans('AOKY;CEI/XW','>WXVJK<PYQC')
-tosyr = maketrans('ABGDHOZKY;CLMNSEI/XRWT','ܐܒܓܕܗܘܙܚܛܝܟܠܡܢܣܥܦܨܩܪܫܬ')
-notr = maketrans('','')
-
-def print_nt(tr=towit):
-    pl = None # pl: previous label
-    for l, v in nt_verses():
-        if pl is None or pl[1] != l[1] or pl[2] != l[2]:
-            if pl is not None:  # no newline before first chapter
-                yield ''
-                # nt.append('')   # add newline before chapter label
-            yield '{0} chapter {1}'.format(l[0], l[2])
-        pl = l
-        yield '{0:2} {1}'.format(l[3],
-                ' '.join([w.cons_str.translate(tr) for w in v]))
-
-def get_supertag(w):
-    return '+'.join([e for e in (w.prefix, w.postag, w.suffix) if e])
-
-def tag_sentences(tr=towit, tag=get_supertag):
-    for l, s in nt_verses():
-        yield [(w.cons_str.translate(tr), tag(w)) for w in s]
-
 def main():
-    for line in print_nt():
+    for line in print_nt(tosyr):
         print(line)
 
 def usage():
