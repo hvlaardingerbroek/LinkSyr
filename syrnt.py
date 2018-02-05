@@ -40,6 +40,18 @@ NT_OFFSET = 52  # starting id of NT books
 
 # helper functions
 
+def read_db_file():
+    from io import open # This is for python 2.6
+    with open(dbpath) as f:
+        for line in f:
+            yield line
+
+def get_verse_labels():
+    for book_id, (book_name, chapters) in enumerate(NT_BOOKS, NT_OFFSET):
+        for chapter, versecount in enumerate(chapters, 1):
+            for verse in range(1, versecount + 1):
+                yield (book_name, book_id, chapter, verse)
+
 def maketrans(s1, s2):
     '''Make a simple translation table'''
     # There are more sophisticated maketrans-functions (str.maketrans()
@@ -53,42 +65,11 @@ towit = maketrans('AOKY;CEI/XW','>WXVJK<PYQC')
 tosyr = maketrans('ABGDHOZKY;CLMNSEI/XRWT','ܐܒܓܕܗܘܙܚܛܝܟܠܡܢܣܥܦܨܩܪܫܬ')
 notr = maketrans('','')
 
-def get_verse_labels():
-    for book_id, (book_name, chapters) in enumerate(NT_BOOKS, NT_OFFSET):
-        for chapter, versecount in enumerate(chapters, 1):
-            for verse in range(1, versecount + 1):
-                yield (book_name, book_id, chapter, verse)
+def postag(w):
+    return w.postag
 
-def nt_verses(tr=towit, label = False):
-    from io import open # This is for python 2.6
-    with open(dbpath) as f:
-        for verse_label, line in zip(get_verse_labels(), f):
-            verse = [NTWord(w_str, verse_label + (w_num,), tr)
-                     for w_num, w_str in enumerate(line.strip().split(), 1)]
-            yield (verse_label, verse) if label else verse
-
-def nt_words(tr=towit):
-    for v in nt_verses(tr):
-        for w in v:
-            yield w
-
-def print_nt(tr=towit):
-    pl = None # pl: previous label
-    for l, v in nt_verses(tr, label = True):
-        if pl is None or pl[1] != l[1] or pl[2] != l[2]:
-            if pl is not None:  # no newline before first chapter
-                yield ''
-                # nt.append('')   # add newline before chapter label
-            yield '{0} chapter {1}'.format(l[0], l[2])
-        pl = l
-        yield '{0:2} {1}'.format(l[3], ' '.join([w.cons_str for w in v]))
-
-def get_supertag(w):
+def supertag(w):
     return '+'.join([e for e in (w.prefix, w.postag, w.suffix) if e])
-
-def tag_sentences(tag=get_supertag):
-    for s in nt_verses():
-        yield [(w.cons_str, tag(w)) for w in s]
 
 
 # class NTWord
@@ -130,8 +111,51 @@ class NTWord:
         # return get_loc_id(self.book_id, self.chapter, self.verse, self.w_num)
 
 
+class SyrNT:
+
+    def __init__(self, tr=towit):
+        self._nt_verses = self._nt_verses(tr)
+        self._nt_words = self._nt_words()
+
+    def __getitem__(self, key):
+        return self._nt_words[key]
+
+    def _nt_verses(self, tr):
+        nt_verses = []
+        for verse_label, line in zip(get_verse_labels(), read_db_file()):
+            verse = [NTWord(w_str, verse_label + (w_num,), tr)
+                     for w_num, w_str in enumerate(line.strip().split(), 1)]
+            nt_verses.append((verse_label, verse))
+        return nt_verses
+
+    def _nt_words(self):
+        return [w for l, v in self._nt_verses for w in v]
+
+    def verses(self, label=False):
+        for v in self._nt_verses:
+            yield v if label else v[1]
+
+    def words(self):
+        for w in self._nt_words:
+            yield w
+
+    def tag_sentences(self, tag=postag):
+        for s in self.verses():
+            yield [(w.cons_str, tag(w)) for w in s]
+
+    def printlines(self):
+        pl = None # pl: previous label
+        for l, v in self.verses(label=True):
+            if pl is None or pl[1] != l[1] or pl[2] != l[2]:
+                if pl is not None:  # no newline before first chapter
+                    yield ''
+                yield '{0} chapter {1}'.format(l[0], l[2])
+            pl = l
+            yield '{0:2} {1}'.format(l[3], ' '.join([w.cons_str for w in v]))
+
+
 def main():
-    for line in print_nt(tosyr):
+    for line in SyrNT(tosyr).printlines():
         print(line)
 
 def usage():
