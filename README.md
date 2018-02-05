@@ -26,4 +26,8 @@ nt = syrnt.Syrnt()
 ```
 
 ## Transcription
-Default transcription for both is the WIT transcription used at ETCBC.
+Default transcription for both is the WIT transcription used at ETCBC. A different transcription can be specified at initialization (at this moment only `tosyr` or `None`:
+```
+nt1 = sedra.BFBS(sedra.tosyr)
+nt2 = syrnt.Syrnt(syrnt.tosyr)
+```
