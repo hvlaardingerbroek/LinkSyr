@@ -84,7 +84,7 @@ def read_db_file(db_dir, filename):
             yield line
 
 def get_identifier(o):
-    return '<{0}.{1} {2}: {3}>'.format(
+    return '<{0}.{1} {2}: "{3}">'.format(
         o.__module__, o.__class__.__name__, o.id, o.__str__())
 
 def get_address(a):
@@ -118,8 +118,8 @@ def maketrans(s1, s2):
 
 # translation tables:
 # source is always SEDRA transcription, so only need to specify 'to'.
-towit = maketrans('AOKY;CEI/XW','>WXVJK<PYQC')
-tosyr = maketrans('ABGDHOZKY;CLMNSEI/XRWT','ܐܒܓܕܗܘܙܚܛܝܟܠܡܢܣܥܦܨܩܪܫܬ')
+towit = maketrans("AOKY;CEI/XW*,'oaeiu",'>WXVJK<PYQC"#^A@EIU')
+tosyr = maketrans("ABGDHOZKY;CLMNSEI/XRWT*,'_oaeiu",'ܐܒܓܕܗܘܙܚܛܝܟܠܡܢܣܥܦܨܩܪܫܬ̣̱̈̇ܳܰܶܺܽ')
 notr = maketrans('','')
 
 
@@ -132,11 +132,12 @@ class Root:
                     [f[0].strip('<>').replace(' ','_') for f in c.ROOTS_ATTR])
 
     def __init__(self, line, file_no, name, db):
+        tr = db._tr
         self.file_no = file_no
         self.name = name
         self.db = db
         self.id = int(line[0].split(':')[1])
-        self.rt_str = line[1]
+        self.rt_str = line[1] if tr is None else line[1].translate(tr)
         self.sort_str = line[2]
         self.attr = int(line[3])
         attr_values = get_values(self.attr, c.ROOTS_ATTR)
@@ -166,12 +167,13 @@ class Lexeme:
                     [f[0].strip('<>').replace(' ','_') for f in c.LEXEMES_FEAT])
 
     def __init__(self, line, file_no, name, db):
+        tr = db._tr
         self.file_no = file_no
         self.name = name
         self.db = db
         self.id = int(line[0].split(':')[1])
         self.root_addr = get_address(line[1])
-        self.lex_str = line[2]
+        self.lex_str = line[2] if tr is None else line[2].translate(tr)
         self.feat = int(line[3])
         feat_values = get_values(self.feat, c.LEXEMES_FEAT)
         self.features = Lexeme.Features(*feat_values)
@@ -220,13 +222,17 @@ class Word:
                     [f[0].strip('<>').replace(' ','_').replace('/','_') for f in c.WORDS_FEAT])
 
     def __init__(self, line, file_no, name, db):
+        tr = db._tr
         self.file_no = file_no
         self.name = name
         self.db = db
         self.id = int(line[0].split(':')[1])
         self.lex_addr = get_address(line[1])
-        self.cons_str = line[2]
-        self.voc_str = line[3]
+        self.cons_str = line[2] if tr is None else line[2].translate(tr)
+        self.voc_str = line[3] if tr is None else line[3].translate(tr)
+        # correct transcription of digraph #_ in WIT transcription
+        if tr == towit and '_' in self.voc_str:
+            self.voc_str = self.voc_str.replace('_', '#_')
         self.feat = int(line[4])
         feat_values = get_values(self.feat, c.WORDS_FEAT)
         self.features = Word.Features(*feat_values)
@@ -313,7 +319,8 @@ class SedraIII:
                   ('english',   English),
                   ('etymology', Etymology))
 
-    def __init__(self):
+    def __init__(self, tr=towit):
+        self._tr = tr
         self._dicts = {}
         for file_no, (name, db_class) in enumerate(SedraIII.db_classes): # zip(SedraIII.files, SedraIII.classes):
             addr_dict, db = self._import_db(file_no, name, db_class)
@@ -390,9 +397,9 @@ class NTWord:
 
 class BFBS:
 
-    def __init__(self, db = None):
+    def __init__(self, tr = towit, db = None):
         if db == None:
-            db = SedraIII()
+            db = SedraIII(tr=tr)
         self.db = db
         self.nt = self._read_nt_file()
 
@@ -422,7 +429,7 @@ class BFBS:
         for w in self.nt:
             yield w
 
-    def printlines(self, tr=towit):
+    def printlines(self):
         pl = None # pl: previous label
         for l, v in self.verses(label=True):
             if pl is None or pl[1] != l[1] or pl[2] != l[2]:
@@ -430,12 +437,11 @@ class BFBS:
                     yield ''
                 yield '{0} chapter {1}'.format(l[0], l[2])
             pl = l
-            yield '{0:2} {1}'.format(l[3],
-                    ' '.join([w.cons_str.translate(tr) for w in v]))
+            yield '{0:2} {1}'.format(l[3], ' '.join([w.cons_str for w in v]))
 
 
 def main():
-    for line in BFBS().printlines(tosyr):
+    for line in BFBS(tosyr).printlines():
         print(line)
 
 def usage():
