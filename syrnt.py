@@ -116,9 +116,26 @@ class SyrNT:
     def __init__(self, tr=towit):
         self._nt_verses = self._nt_verses(tr)
         self._nt_words = self._nt_words()
+        self._idx = 0
 
     def __getitem__(self, key):
         return self._nt_words[key]
+
+    def __len__(self):
+        return len(self._nt_words)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        try:
+            item = self._nt_words[self._idx]
+        except IndexError:
+            raise StopIteration()
+        self._idx += 1
+        return item
+
+    next = __next__ # Python 2
 
     def _nt_verses(self, tr):
         nt_verses = []
