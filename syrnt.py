@@ -131,6 +131,7 @@ class SyrNT:
         try:
             item = self._nt_words[self._idx]
         except IndexError:
+            self._idx = 0
             raise StopIteration()
         self._idx += 1
         return item
